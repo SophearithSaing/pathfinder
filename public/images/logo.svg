@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pathfinder favicon">
+  <rect width="512" height="512" rx="112" fill="#111C2E"/>
+  <circle cx="256" cy="256" r="176" fill="#F7F3EA"/>
+  <circle cx="256" cy="256" r="128" fill="none" stroke="#111C2E" stroke-width="24"/>
+  <path d="M354 118 L296 296 L158 394 L216 216 Z" fill="#111C2E"/>
+  <circle cx="256" cy="256" r="18" fill="#F7F3EA"/>
+</svg>

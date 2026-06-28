@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import AppButton from '../components/AppButton.vue';
 import AppForm from '../components/AppForm.vue';
@@ -7,6 +8,7 @@ import AppFormField from '../components/AppFormField.vue';
 import { useAuthStore } from '../stores/auth';
 
 const authStore = useAuthStore();
+const router = useRouter();
 const username = ref('');
 const password = ref('');
 const formError = ref('');
@@ -34,6 +36,7 @@ async function handleSubmit(): Promise<void> {
 
   try {
     await authStore.login(username.value, password.value);
+    await router.push({ name: 'dashboard' });
   } catch (error) {
     formError.value = getErrorMessage(error);
   } finally {

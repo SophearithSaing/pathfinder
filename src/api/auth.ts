@@ -14,10 +14,7 @@ import type {
  * @param password Password to authenticate.
  * @returns Authenticated user response.
  */
-export async function login(
-  username: string,
-  password: string,
-): Promise<LoginResponse> {
+export async function login(username: string, password: string): Promise<LoginResponse> {
   const body: LoginRequestBody = {
     username,
     password,

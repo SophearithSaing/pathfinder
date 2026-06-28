@@ -39,10 +39,7 @@ async function handleSubmit(): Promise<void> {
     await authStore.login(username.value, password.value);
     await router.push({ name: 'dashboard' });
   } catch (error) {
-    formError.value = getErrorMessage(
-      error,
-      'Unable to begin session. Please try again.',
-    );
+    formError.value = getErrorMessage(error, 'Unable to begin session. Please try again.');
   } finally {
     isSubmitting.value = false;
   }

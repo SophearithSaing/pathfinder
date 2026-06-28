@@ -15,6 +15,10 @@ export interface MeResponse {
   user: AuthUser;
 }
 
+export interface LogoutResponse {
+  ok: boolean;
+}
+
 export interface LoginRequestBody {
   username: string;
   password: string;

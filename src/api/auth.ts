@@ -2,6 +2,7 @@ import { apiFetch, RequestMethod } from './client';
 import type {
   LoginRequestBody,
   LoginResponse,
+  LogoutResponse,
   MeResponse,
   RefreshResponse,
 } from '../models/auth';
@@ -47,5 +48,16 @@ export async function refresh(): Promise<RefreshResponse> {
 export async function me(): Promise<MeResponse> {
   return await apiFetch<MeResponse>('/me', {
     method: RequestMethod.Get,
+  });
+}
+
+/**
+ * Logs out the current user and clears auth cookies through the API.
+ *
+ * @returns Logout result.
+ */
+export async function logout(): Promise<LogoutResponse> {
+  return await apiFetch<LogoutResponse>('/auth/logout', {
+    method: RequestMethod.Post,
   });
 }

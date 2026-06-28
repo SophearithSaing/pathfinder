@@ -35,6 +35,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
+   * Restores an existing authenticated session from cookies.
+   *
+   * @returns Authenticated user, or null when no session exists.
+   */
+  async function bootstrapSession(): Promise<AuthUser | null> {
+    const currentUser = await loadCurrentUser();
+
+    if (currentUser !== null) {
+      return currentUser;
+    }
+
+    return await refreshSession();
+  }
+
+  /**
    * Loads the current authenticated user from existing auth cookies.
    *
    * @returns Authenticated user, or null when no session exists.
@@ -83,6 +98,24 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
+   * Logs out through the API and clears local auth state.
+   */
+  async function logout(): Promise<void> {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      await authApi.logout();
+      clearAuth();
+    } catch (unknownError) {
+      error.value = getErrorMessage(unknownError);
+      throw unknownError;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /**
    * Clears local auth state.
    */
   function clearAuth(): void {
@@ -105,12 +138,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
+    bootstrapSession,
     clearAuth,
     error,
     isAuthenticated,
     isLoading,
     loadCurrentUser,
     login,
+    logout,
     refreshSession,
     user,
   };

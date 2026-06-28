@@ -1,5 +1,5 @@
 export interface AuthUser {
-  id: string;
+  userId: string;
   username: string;
 }
 
@@ -11,13 +11,8 @@ export interface RefreshResponse {
   user: AuthUser;
 }
 
-export interface CurrentAuthUser {
-  userId: string;
-  username: string;
-}
-
 export interface MeResponse {
-  user: CurrentAuthUser;
+  user: AuthUser;
 }
 
 export interface LoginRequestBody {

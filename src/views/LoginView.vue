@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { login } from '../api/auth';
 import AppButton from '../components/AppButton.vue';
 import AppForm from '../components/AppForm.vue';
 import AppFormField from '../components/AppFormField.vue';
+import { useAuthStore } from '../stores/auth';
 
+const authStore = useAuthStore();
 const username = ref('');
 const password = ref('');
 const formError = ref('');
@@ -32,7 +33,7 @@ async function handleSubmit(): Promise<void> {
   username.value = username.value.trim();
 
   try {
-    await login(username.value, password.value);
+    await authStore.login(username.value, password.value);
   } catch (error) {
     formError.value = getErrorMessage(error);
   } finally {

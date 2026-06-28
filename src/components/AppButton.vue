@@ -37,24 +37,24 @@ withDefaults(defineProps<AppButtonProps>(), {
   padding: var(--space-2) var(--space-3);
   text-decoration: none;
 
-  &--primary {
-    background: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    color: var(--color-on-primary);
-
-    &:hover:not(:disabled) {
-      background: var(--color-secondary);
-      border-color: var(--color-secondary);
-    }
-  }
-
   &:disabled {
     cursor: not-allowed;
     opacity: 0.65;
   }
+}
 
-  &--full {
-    width: 100%;
+.app-button--primary {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-on-primary);
+
+  &:hover:not(:disabled) {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
   }
+}
+
+.app-button--full {
+  width: 100%;
 }
 </style>

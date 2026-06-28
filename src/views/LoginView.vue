@@ -1,18 +1,57 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import { login } from '../api/auth';
 import AppButton from '../components/AppButton.vue';
 import AppForm from '../components/AppForm.vue';
 import AppFormField from '../components/AppFormField.vue';
 
 const username = ref('');
 const password = ref('');
+const formError = ref('');
+const isPasswordVisible = ref(false);
+const isSubmitting = ref(false);
+
+/**
+ * Toggles password field visibility.
+ */
+function togglePasswordVisibility(): void {
+  isPasswordVisible.value = !isPasswordVisible.value;
+}
 
 /**
  * Handles login form submission.
  */
-function handleSubmit(): void {
+async function handleSubmit(): Promise<void> {
+  if (isSubmitting.value) {
+    return;
+  }
+
+  formError.value = '';
+  isSubmitting.value = true;
   username.value = username.value.trim();
+
+  try {
+    await login(username.value, password.value);
+  } catch (error) {
+    formError.value = getErrorMessage(error);
+  } finally {
+    isSubmitting.value = false;
+  }
+}
+
+/**
+ * Gets a readable error message.
+ *
+ * @param error Unknown error value.
+ * @returns Error message to display.
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return 'Unable to begin session. Please try again.';
 }
 </script>
 
@@ -22,16 +61,9 @@ function handleSubmit(): void {
 
     <section class="login-card surface-card" aria-labelledby="login-title">
       <header class="login-brand">
-        <img
-          class="login-mark"
-          src="/images/logo.svg"
-          alt=""
-          aria-hidden="true"
-        />
+        <img class="login-mark" src="/images/logo.svg" alt="" aria-hidden="true" />
 
-        <h1 id="login-title" class="login-title text-display-lg">
-          Pathfinder
-        </h1>
+        <h1 id="login-title" class="login-title text-display-lg">Pathfinder</h1>
 
         <p class="login-subtitle text-body-md text-muted">Academic Pursuit</p>
       </header>
@@ -52,7 +84,13 @@ function handleSubmit(): void {
 
         <AppFormField id="password" label="Password" required>
           <template #action>
-            <a class="login-link text-label-md" href="#">Forgot?</a>
+            <button
+              class="login-inline-action text-label-md"
+              type="button"
+              @click="togglePasswordVisibility"
+            >
+              {{ isPasswordVisible ? 'Hide' : 'Show' }}
+            </button>
           </template>
 
           <input
@@ -63,12 +101,18 @@ function handleSubmit(): void {
             name="password"
             placeholder="••••••••"
             required
-            type="password"
+            :type="isPasswordVisible ? 'text' : 'password'"
           />
         </AppFormField>
 
-        <AppButton full-width type="submit">
-          <span class="text-label-md">Begin Session</span>
+        <p v-if="formError" class="login-error text-body-sm" role="alert">
+          {{ formError }}
+        </p>
+
+        <AppButton :disabled="isSubmitting" full-width type="submit">
+          <span class="text-label-md">
+            {{ isSubmitting ? 'Beginning Session' : 'Begin Session' }}
+          </span>
         </AppButton>
       </AppForm>
 
@@ -139,6 +183,26 @@ function handleSubmit(): void {
 .login-subtitle {
   font-style: italic;
   margin: 0;
+}
+
+.login-error {
+  color: var(--color-error);
+  margin: 0;
+}
+
+.login-inline-action {
+  background: none;
+  border: 0;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--color-secondary);
+  }
 }
 
 .login-link {

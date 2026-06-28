@@ -3,6 +3,9 @@ import { defineStore } from 'pinia';
 
 import * as authApi from '../api/auth';
 import type { AuthUser } from '../models/auth';
+import { getErrorMessage } from '../utils/error';
+
+const authErrorMessage = 'Unable to update authentication state.';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<AuthUser | null>(null);
@@ -27,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       return response.user;
     } catch (unknownError) {
-      error.value = getErrorMessage(unknownError);
+      error.value = getErrorMessage(unknownError, authErrorMessage);
       throw unknownError;
     } finally {
       isLoading.value = false;
@@ -65,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
       return response.user;
     } catch (unknownError) {
       user.value = null;
-      error.value = getErrorMessage(unknownError);
+      error.value = getErrorMessage(unknownError, authErrorMessage);
 
       return null;
     } finally {
@@ -89,7 +92,7 @@ export const useAuthStore = defineStore('auth', () => {
       return response.user;
     } catch (unknownError) {
       user.value = null;
-      error.value = getErrorMessage(unknownError);
+      error.value = getErrorMessage(unknownError, authErrorMessage);
 
       return null;
     } finally {
@@ -108,7 +111,7 @@ export const useAuthStore = defineStore('auth', () => {
       await authApi.logout();
       clearAuth();
     } catch (unknownError) {
-      error.value = getErrorMessage(unknownError);
+      error.value = getErrorMessage(unknownError, authErrorMessage);
       throw unknownError;
     } finally {
       isLoading.value = false;
@@ -121,20 +124,6 @@ export const useAuthStore = defineStore('auth', () => {
   function clearAuth(): void {
     user.value = null;
     error.value = '';
-  }
-
-  /**
-   * Gets a readable error message.
-   *
-   * @param unknownError Unknown error value.
-   * @returns Error message.
-   */
-  function getErrorMessage(unknownError: unknown): string {
-    if (unknownError instanceof Error) {
-      return unknownError.message;
-    }
-
-    return 'Unable to update authentication state.';
   }
 
   return {

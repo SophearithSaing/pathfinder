@@ -6,6 +6,7 @@ import AppButton from '../components/AppButton.vue';
 import AppForm from '../components/AppForm.vue';
 import AppFormField from '../components/AppFormField.vue';
 import { useAuthStore } from '../stores/auth';
+import { getErrorMessage } from '../utils/error';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -38,24 +39,13 @@ async function handleSubmit(): Promise<void> {
     await authStore.login(username.value, password.value);
     await router.push({ name: 'dashboard' });
   } catch (error) {
-    formError.value = getErrorMessage(error);
+    formError.value = getErrorMessage(
+      error,
+      'Unable to begin session. Please try again.',
+    );
   } finally {
     isSubmitting.value = false;
   }
-}
-
-/**
- * Gets a readable error message.
- *
- * @param error Unknown error value.
- * @returns Error message to display.
- */
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return 'Unable to begin session. Please try again.';
 }
 </script>
 

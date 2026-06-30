@@ -62,12 +62,22 @@ export interface ProjectProgress {
   projectId: string;
   title: string;
   description: string;
+  completedItems: Record<string, boolean>;
   progress: number;
   notes: Record<string, ProjectProgressEntry>;
   createdAt: string;
   updatedAt: string;
   project?: ProjectProgressProject;
 }
+
+export interface UpdateProjectProgressPayload {
+  projectId: string;
+  completedItems: Record<string, boolean>;
+  progress: number;
+  notes: Record<string, ProjectProgressEntry>;
+}
+
+export type CompletedItemsUpdateBody = Record<string, boolean>;
 
 export interface ProjectProgressListResponse {
   projectProgresses: ProjectProgress[];

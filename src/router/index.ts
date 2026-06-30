@@ -27,6 +27,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    {
+      path: '/progress/:progressId',
+      name: 'progress',
+      component: () => import('../views/ProgressView.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
   ],
 });
 

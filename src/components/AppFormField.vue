@@ -66,8 +66,14 @@ defineSlots<AppFormFieldSlots>();
   border: var(--border-control);
   border-radius: 0;
   color: var(--color-on-surface);
-  padding: var(--space-2);
+  padding: calc(var(--space-base) * 1.5) var(--space-2);
   width: 100%;
+}
+
+:slotted(.text-input--textarea) {
+  line-height: var(--line-height-body-md);
+  min-height: calc(var(--space-base) * 24);
+  resize: vertical;
 }
 
 :slotted(.text-input::placeholder) {

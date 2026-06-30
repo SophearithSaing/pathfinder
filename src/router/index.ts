@@ -46,8 +46,14 @@ router.beforeEach(handleAuthRoute);
  * @param to Route being navigated to.
  * @returns Redirect target when navigation should be redirected.
  */
-function handleAuthRoute(to: RouteLocationNormalized): NavigationGuardReturn {
+async function handleAuthRoute(
+  to: RouteLocationNormalized,
+): Promise<NavigationGuardReturn> {
   const authStore = useAuthStore();
+
+  if (!authStore.hasBootstrapped) {
+    await authStore.bootstrapSession();
+  }
 
   if (to.meta.requiresAuth === true && !authStore.isAuthenticated) {
     return { name: 'login' };

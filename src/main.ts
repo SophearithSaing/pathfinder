@@ -3,11 +3,10 @@ import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from './router';
-import { useAuthStore } from './stores/auth';
 import './assets/design-system.css';
 
 /**
- * Creates the Vue app and restores auth state before mounting.
+ * Creates and mounts the Vue app.
  */
 async function bootstrapApp(): Promise<void> {
   const app = createApp(App);
@@ -15,12 +14,7 @@ async function bootstrapApp(): Promise<void> {
 
   app.use(pinia);
 
-  const authStore = useAuthStore(pinia);
-  await authStore.bootstrapSession();
-
   app.use(router);
-  await router.isReady();
-
   app.mount('#app');
 }
 

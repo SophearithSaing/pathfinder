@@ -10,6 +10,7 @@ const authErrorMessage = 'Unable to update authentication state.';
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<AuthUser | null>(null);
   const isLoading = ref(false);
+  const hasBootstrapped = ref(false);
   const error = ref('');
   const isAuthenticated = computed<boolean>(() => user.value !== null);
 
@@ -43,13 +44,21 @@ export const useAuthStore = defineStore('auth', () => {
    * @returns Authenticated user, or null when no session exists.
    */
   async function bootstrapSession(): Promise<AuthUser | null> {
-    const currentUser = await loadCurrentUser();
-
-    if (currentUser !== null) {
-      return currentUser;
+    if (hasBootstrapped.value) {
+      return user.value;
     }
 
-    return await refreshSession();
+    try {
+      const currentUser = await loadCurrentUser();
+
+      if (currentUser !== null) {
+        return currentUser;
+      }
+
+      return await refreshSession();
+    } finally {
+      hasBootstrapped.value = true;
+    }
   }
 
   /**
@@ -130,6 +139,7 @@ export const useAuthStore = defineStore('auth', () => {
     bootstrapSession,
     clearAuth,
     error,
+    hasBootstrapped,
     isAuthenticated,
     isLoading,
     loadCurrentUser,

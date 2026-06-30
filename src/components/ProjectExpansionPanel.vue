@@ -8,10 +8,12 @@ interface ProjectExpansionPanelProps {
   phaseNumber: number;
   initiallyOpen?: boolean;
   selectedItemId?: string;
+  completedItems?: Record<string, boolean>;
 }
 
 interface ProjectExpansionPanelEmits {
   selectItem: [phase: ProjectPhase, sectionId: string, item: ProjectCurriculumItem];
+  toggleItemCompleted: [itemId: string, completed: boolean];
 }
 
 interface CurriculumSection {
@@ -23,11 +25,11 @@ interface CurriculumSection {
 const props = withDefaults(defineProps<ProjectExpansionPanelProps>(), {
   initiallyOpen: false,
   selectedItemId: '',
+  completedItems: () => ({}),
 });
 const emit = defineEmits<ProjectExpansionPanelEmits>();
 
 const isOpen = ref(props.initiallyOpen);
-const checkedItems = reactive<Record<string, boolean>>({});
 const openSections = reactive<Record<string, boolean>>({
   concepts: true,
   tools: true,
@@ -88,16 +90,16 @@ function toggleSection(sectionId: string): void {
  * @returns Whether the item is checked.
  */
 function isItemChecked(itemId: string): boolean {
-  return checkedItems[itemId] === true;
+  return props.completedItems[itemId] === true;
 }
 
 /**
- * Toggles completion state for a curriculum item.
+ * Emits a completion state change for a curriculum item.
  *
  * @param itemId Curriculum item id.
  */
 function toggleItemChecked(itemId: string): void {
-  checkedItems[itemId] = !isItemChecked(itemId);
+  emit('toggleItemCompleted', itemId, !isItemChecked(itemId));
 }
 
 /**

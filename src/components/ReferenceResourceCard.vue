@@ -111,8 +111,9 @@ function handleDelete(): void {
 
 .reference-resource-actions {
   display: flex;
+  flex-direction: column;
   flex-shrink: 0;
-  gap: var(--space-1);
+  gap: calc(var(--space-1) / 2);
   opacity: 0;
   transition: opacity 160ms ease;
 }

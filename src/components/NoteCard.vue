@@ -117,7 +117,7 @@ function handleDelete(): void {
 
 .note-card-bookmark {
   color: var(--color-primary);
-  font-size: var(--font-size-body-md);
+  font-size: var(--font-size-body-sm);
 }
 
 .note-card-action {
@@ -139,7 +139,7 @@ function handleDelete(): void {
 }
 
 .note-card-action .material-symbols-outlined {
-  font-size: var(--font-size-headline-sm);
+  font-size: var(--font-size-body-md);
 }
 
 .note-card-text {
